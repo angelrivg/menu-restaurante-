@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar Mesa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            color: white;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 90%;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3498db;
+        }
+
+        textarea {
+            padding-left: 12px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            width: 100%;
+            transition: transform 0.2s ease;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(to right, #2980b9, #2c3e50);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-cancel {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+        }
+
+        .btn-cancel:hover {
+            background: linear-gradient(to right, #c0392b, #a93226);
+        }
+
+        .reservation-details {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .reservation-details h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .reservation-details p {
+            margin: 0.5rem 0;
+            color: #34495e;
+        }
+
+        .cancel-policy {
+            color: #c0392b;
+            font-weight: 600;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .action-buttons button {
+            flex: 1;
+        }
+
+        .error-message {
+            color: #c0392b;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+                padding: 1.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1><i class="fas fa-utensils"></i> Reservar Mesa</h1>
+
+    <div class="container">
+        <form id="reserva-form">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <i class="fas fa-user"></i>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="apellido">Apellido:</label>
+                <i class="fas fa-user"></i>
+                <input type="text" id="apellido" name="apellido" required>
+            </div>
+
+            <div class="form-group">
+                <label for="correo">Correo electrónico:</label>
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="correo" name="correo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Número de teléfono:</label>
+                <i class="fas fa-phone"></i>
+                <input type="tel" id="telefono" name="telefono" pattern="[0-9]{10}" minlength="10" maxlength="10" required>
+                <div id="telefono-error" class="error-message">El número de teléfono debe contener exactamente 10 dígitos numéricos.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha">Fecha de la reserva:</label>
+                <i class="fas fa-calendar"></i>
+                <input type="date" id="fecha" name="fecha" required>
+                <div id="fecha-error" class="error-message">No se pueden hacer reservas los martes ni los jueves.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="hora">Hora de la reserva:</label>
+                <i class="fas fa-clock"></i>
+                <input type="time" id="hora" name="hora" min="09:00" max="21:00" required>
+                <div id="hora-error" class="error-message">La hora de reserva debe estar entre las 9:00 AM y las 9:00 PM.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="personas">Número de personas:</label>
+                <i class="fas fa-users"></i>
+                <input type="number" id="personas" name="personas" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="especificaciones">Especificaciones adicionales:</label>
+                <textarea id="especificaciones" name="especificaciones" rows="4" placeholder="Ejemplo: Área para no fumadores, silla para niños, etc."></textarea>
+            </div>
+
+            <button type="submit" class="btn">Reservar Ahora</button>
+        </form>
+
+        <div id="reservation-details" class="reservation-details" style="display: none;">
+            <h2>Detalles de la Reserva</h2>
+            <p><strong>Nombre:</strong> <span id="detail-nombre"></span></p>
+            <p><strong>Apellido:</strong> <span id="detail-apellido"></span></p>
+            <p><strong>Correo:</strong> <span id="detail-correo"></span></p>
+            <p><strong>Teléfono:</strong> <span id="detail-telefono"></span></p>
+            <p><strong>Fecha:</strong> <span id="detail-fecha"></span></p>
+            <p><strong>Hora:</strong> <span id="detail-hora"></span></p>
+            <p><strong>Personas:</strong> <span id="detail-personas"></span></p>
+            <p><strong>Especificaciones:</strong> <span id="detail-especificaciones"></span></p>
+            <p class="cancel-policy">La reserva solo se puede cancelar con un plazo máximo de 2 días.</p>
+            <div class="action-buttons">
+                <button id="modify-btn" class="btn">Modificar Reserva</button>
+                <button id="cancel-btn" class="btn btn-cancel">Cancelar Reserva</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let reservationData = null;
+
+        const form = document.getElementById('reserva-form');
+        const detailsSection = document.getElementById('reservation-details');
+        const modifyBtn = document.getElementById('modify-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const telefonoInput = document.getElementById('telefono');
+        const telefonoError = document.getElementById('telefono-error');
+        const fechaInput = document.getElementById('fecha');
+        const fechaError = document.getElementById('fecha-error');
+        const horaInput = document.getElementById('hora');
+        const horaError = document.getElementById('hora-error');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const telefono = telefonoInput.value;
+            const fecha = fechaInput.value;
+            const hora = horaInput.value;
+
+            // Validar que el número de teléfono tenga exactamente 10 dígitos numéricos
+            if (!/^\d{10}$/.test(telefono)) {
+                telefonoError.style.display = 'block';
+                telefonoInput.focus();
+                return;
+            } else {
+                telefonoError.style.display = 'none';
+            }
+
+            // Validar que la fecha no sea martes (2) ni jueves (4)
+            const selectedDate = new Date(fecha);
+            const dayOfWeek = selectedDate.getDay();
+            if (dayOfWeek === 2 || dayOfWeek === 4) {
+                fechaError.style.display = 'block';
+                fechaInput.focus();
+                return;
+            } else {
+                fechaError.style.display = 'none';
+            }
+
+            // Validar que la hora esté entre 9:00 AM y 9:00 PM
+            const [hours, minutes] = hora.split(':').map(Number);
+            if (hours < 9 || hours > 21 || (hours === 21 && minutes > 0)) {
+                horaError.style.display = 'block';
+                horaInput.focus();
+                return;
+            } else {
+                horaError.style.display = 'none';
+            }
+
+            // Obtener los valores del formulario
+            reservationData = {
+                nombre: document.getElementById('nombre').value,
+                apellido: document.getElementById('apellido').value,
+                correo: document.getElementById('correo').value,
+                telefono: telefono,
+                fecha: fecha,
+                hora: hora,
+                personas: document.getElementById('personas').value,
+                especificaciones: document.getElementById('especificaciones').value
+            };
+
+            // Mostrar los detalles de la reserva
+            updateDetails(reservationData);
+
+            // Mostrar la sección de detalles y ocultar el formulario
+            detailsSection.style.display = 'block';
+            form.style.display = 'none';
+
+            // Mostrar alerta de confirmación
+            alert(`¡Gracias por tu reserva, ${reservationData.nombre} ${reservationData.apellido}!`);
+        });
+
+        function updateDetails(data) {
+            document.getElementById('detail-nombre').textContent = data.nombre;
+            document.getElementById('detail-apellido').textContent = data.apellido;
+            document.getElementById('detail-correo').textContent = data.correo;
+            document.getElementById('detail-telefono').textContent = data.telefono;
+            document.getElementById('detail-fecha').textContent = data.fecha;
+            document.getElementById('detail-hora').textContent = data.hora;
+            document.getElementById('detail-personas').textContent = data.personas;
+            document.getElementById('detail-especificaciones').textContent = data.especificaciones || 'Ninguna';
+        }
+
+        modifyBtn.addEventListener('click', function() {
+            // Rellenar el formulario con los datos actuales
+            document.getElementById('nombre').value = reservationData.nombre;
+            document.getElementById('apellido').value = reservationData.apellido;
+            document.getElementById('correo').value = reservationData.correo;
+            document.getElementById('telefono').value = reservationData.telefono;
+            document.getElementById('fecha').value = reservationData.fecha;
+            document.getElementById('hora').value = reservationData.hora;
+            document.getElementById('personas').value = reservationData.personas;
+            document.getElementById('especificaciones').value = reservationData.especificaciones;
+
+            // Mostrar el formulario y ocultar los detalles
+            form.style.display = 'block';
+            detailsSection.style.display = 'none';
+            telefonoError.style.display = 'none';
+            fechaError.style.display = 'none';
+            horaError.style.display = 'none';
+        });
+
+        cancelBtn.addEventListener('click', function() {
+            if (confirm('¿Estás seguro de que deseas cancelar la reserva?')) {
+                reservationData = null;
+                form.reset();
+                form.style.display = 'block';
+                detailsSection.style.display = 'none';
+                telefonoError.style.display = 'none';
+                fechaError.style.display = 'none';
+                horaError.style.display = 'none';
+                alert('Reserva cancelada con éxito.');
+            }
+        });
+
+        // Validación en tiempo real para el campo de teléfono
+        telefonoInput.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+            if (this.value.length === 10 && /^\d{10}$/.test(this.value)) {
+                telefonoError.style.display = 'none';
+            } else {
+                telefonoError.style.display = 'block';
+            }
+        });
+
+        // Validación en tiempo real para el campo de fecha
+        fechaInput.addEventListener('input', function() {
+            const fecha = this.value;
+            if (fecha) {
+                const selectedDate = new Date(fecha);
+                const dayOfWeek = selectedDate.getDay();
+                if (dayOfWeek === 2 || dayOfWeek === 4) {
+                    fechaError.style.display = 'block';
+                } else {
+                    fechaError.style.display = 'none';
+                }
+            }
+        });
+
+        // Validación en tiempo real para el campo de hora
+        horaInput.addEventListener('input', function() {
+            const hora = this.value;
+            if (hora) {
+                const [hours, minutes] = hora.split(':').map(Number);
+                if (hours < 9 || hours > 21 || (hours === 21 && minutes > 0)) {
+                    horaError.style.display = 'block';
+                } else {
+                    horaError.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

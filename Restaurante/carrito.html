@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carrito de Compras</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 80%;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .cart-items {
+      margin-top: 20px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .cart-item img {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .cart-item-details {
+      flex-grow: 1;
+    }
+
+    .cart-item-details p {
+      margin: 0;
+    }
+
+    .total {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: right;
+      padding-top: 20px;
+    }
+
+    .btn {
+      display: block;
+      width: 200px;
+      background-color: #ff7043;
+      color: white;
+      padding: 8px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 20px auto;
+    }
+
+    .btn:hover {
+      background-color: #f4511e;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🛒 Carrito de Compras</h1>
+
+  <div class="cart-items" id="cart-items">
+    <!-- Los elementos del carrito se agregarán aquí -->
+  </div>
+
+  <div class="total" id="total-price">
+    Total: $0
+  </div>
+
+  <a href="ticket.html" class="btn" id="finalizar-compra">Finalizar Compra</a>
+</div>
+
+<script>
+  function actualizarCarrito() {
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const cartItems = document.getElementById('cart-items');
+    let total = 0;
+
+    cartItems.innerHTML = '';
+
+    carrito.forEach(item => {
+      const cartItemDiv = document.createElement('div');
+      cartItemDiv.classList.add('cart-item');
+      cartItemDiv.innerHTML = `
+        <img src="${item.imagen}" alt="${item.nombre}">
+        <div class="cart-item-details">
+          <p><strong>${item.nombre}</strong></p>
+          <p>Precio: $${item.precio}</p>
+        </div>
+      `;
+      cartItems.appendChild(cartItemDiv);
+      total += item.precio;
+    });
+
+    document.getElementById('total-price').innerText = `Total: $${total.toFixed(2)}`;
+  }
+
+  document.getElementById('finalizar-compra').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.location.href = 'ticket.html';
+  });
+
+  window.onload = actualizarCarrito;
+</script>
+
+</body>
+</html>

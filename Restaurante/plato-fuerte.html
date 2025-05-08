@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platos Fuertes Mexicanos</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #fefefe; margin: 0; padding: 0; }
+    h1 { text-align: center; padding: 20px; background-color: #4caf50; color: white; margin: 0; }
+    .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; }
+    .item { margin: 15px; width: 250px; border: 1px solid #ccc; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.2); text-align: center; background-color: #fff; transition: transform 0.2s; position: relative; }
+    .item:hover { transform: scale(1.03); }
+    .item img { width: 100%; height: 170px; object-fit: cover; }
+    .desc { display: none; padding: 10px; font-size: 14px; color: #444; }
+    .item:hover .desc { display: block; }
+    .btn-group { display: flex; justify-content: center; gap: 5px; margin: 10px; }
+    .btn { background-color: #4caf50; color: white; padding: 6px 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; }
+    .btn:hover { background-color: #388e3c; }
+    .remove-btn { background-color: #f44336; }
+    .remove-btn:hover { background-color: #d32f2f; }
+    .menu-btn { display: block; margin: 20px auto; text-align: center; text-decoration: none; background-color: #2196f3; color: white; padding: 10px 20px; border-radius: 8px; width: 200px; }
+    .menu-btn:hover { background-color: #1976d2; }
+    .cantidad { position: absolute; top: 10px; right: 10px; background: #ff9800; color: white; padding: 5px 8px; border-radius: 50%; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<h1>🌮 Platos Fuertes Mexicanos 🍽️</h1>
+
+<div class="container" id="productos">
+  <!-- Los productos se generan aquí -->
+</div>
+
+<a class="menu-btn" href="index.html">⬅️ Volver al menú principal</a>
+
+<script>
+  const productos = [
+    { nombre: 'Mole Poblano', precio: 120, imagen: 'molea.jpg' },
+    { nombre: 'Cochinita Pibil', precio: 110, imagen: 'cochinita.jpg' },
+    { nombre: 'Chile en Nogada', precio: 150, imagen: 'nogada.jpg' },
+    { nombre: 'Birria de Res', precio: 130, imagen: 'birria.jpg' },
+    { nombre: 'Tacos al Pastor', precio: 70, imagen: 'pastor.jpg' },
+    { nombre: 'Tamales Oaxaqueños', precio: 80, imagen: 'tamal.jpg' }
+  ];
+
+  function cargarProductos() {
+    const contenedor = document.getElementById('productos');
+    contenedor.innerHTML = '';
+
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+    productos.forEach(prod => {
+      const cantidad = carrito.find(item => item.nombre === prod.nombre)?.cantidad || 0;
+
+      const div = document.createElement('div');
+      div.className = 'item';
+      div.innerHTML = `
+        <img src="${prod.imagen}" alt="${prod.nombre}">
+        <p class="desc">${prod.nombre} - $${prod.precio}</p>
+        <div class="btn-group">
+          <button class="btn" onclick="agregarAlCarrito('${prod.nombre}', ${prod.precio})">Agregar</button>
+          <button class="btn remove-btn" onclick="eliminarDelCarrito('${prod.nombre}')">Eliminar</button>
+        </div>
+        ${cantidad > 0 ? `<div class="cantidad">${cantidad}</div>` : ''}
+      `;
+      contenedor.appendChild(div);
+    });
+  }
+
+  function agregarAlCarrito(nombre, precio) {
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const index = carrito.findIndex(item => item.nombre === nombre);
+
+    if (index !== -1) {
+      carrito[index].cantidad += 1;
+    } else {
+      carrito.push({ nombre, precio, cantidad: 1 });
+    }
+
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+    cargarProductos();
+  }
+
+  function eliminarDelCarrito(nombre) {
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const index = carrito.findIndex(item => item.nombre === nombre);
+
+    if (index !== -1) {
+      if (carrito[index].cantidad > 1) {
+        carrito[index].cantidad -= 1;
+      } else {
+        carrito.splice(index, 1);
+      }
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      cargarProductos();
+    } else {
+      alert('Este producto no está en el carrito.');
+    }
+  }
+
+  // Inicializar
+  cargarProductos();
+</script>
+
+</body>
+</html>

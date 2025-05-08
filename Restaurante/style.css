@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #f06, #3cf);
+    color: #fff;
+}
+.container {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-top: 50px;
+}
+.logo {
+    width: 150px;
+    margin-bottom: 20px;
+}
+h1 {
+    font-size: 36px;
+}
+.btn {
+    display: block;
+    background: #ff9800;
+    color: #fff;
+    padding: 10px;
+    margin: 10px;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+.btn:hover {
+    background: #f57c00;
+}
+.menu-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.item {
+    position: relative;
+    margin: 10px;
+}
+.food-img {
+    width: 220px;
+    height: 150px;
+    border-radius: 10px;
+    cursor: pointer;
+    object-fit: cover;
+}
+.desc {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: 0 0 10px 10px;
+}
+.item:hover .desc {
+    opacity: 1;
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ticket de Compra</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 80%;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .ticket-header {
+      text-align: center;
+      padding: 20px;
+      background-color: #ff7043;
+      color: white;
+    }
+
+    .ticket-details {
+      padding: 10px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .item:last-child {
+      border-bottom: none;
+    }
+
+    .total {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: right;
+      padding-top: 20px;
+    }
+
+    .btn {
+      display: block;
+      width: 200px;
+      background-color: #ff7043;
+      color: white;
+      padding: 8px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 30px auto 0;
+    }
+
+    .btn:hover {
+      background-color: #f4511e;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="ticket-header">
+    <h1>🎫 Ticket de Compra</h1>
+    <p>¡Gracias por tu compra!</p>
+  </div>
+
+  <div class="ticket-details" id="ticket-contenido">
+    <h2>Detalles de tu compra</h2>
+    <!-- Productos aparecerán aquí -->
+  </div>
+
+  <div class="total">
+    Total: $<span id="total-ticket">0</span>
+  </div>
+
+  <a href="index.html" class="btn">Volver al Menú</a>
+</div>
+
+<script>
+  function generarTicket() {
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const ticketContenido = document.getElementById('ticket-contenido');
+    const totalTicket = document.getElementById('total-ticket');
+    let total = 0;
+
+    if (carrito.length === 0) {
+      ticketContenido.innerHTML += "<p>No hay productos en tu carrito.</p>";
+    } else {
+      carrito.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'item';
+        itemDiv.innerHTML = `
+          <p>${item.nombre}</p>
+          <p>$${item.precio.toFixed(2)}</p>
+        `;
+        ticketContenido.appendChild(itemDiv);
+        total += item.precio;
+      });
+      totalTicket.innerText = total.toFixed(2);
+    }
+  }
+
+  window.onload = function() {
+    generarTicket();
+    // Limpiar el carrito solo después de mostrar el ticket
+    localStorage.removeItem('carrito');
+  };
+</script>
+
+</body>
+</html>
